@@ -1,4 +1,5 @@
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 import Home from "./Home";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Create from "./Create";
@@ -8,9 +9,9 @@ import NotFound from "./404Error";
 function App() {
   return (
     <Router>
-      <div className="App">
+      <div className="flex flex-col h-screen bg-gray-100 overflow-x-hidden">
         <Navbar />
-        <div className="content">
+        <div className="flex flex-grow justify-center">
           <Switch>
             <Route exact path="/">
               <Home />
@@ -26,6 +27,7 @@ function App() {
             </Route>
           </Switch>
         </div>
+        <Footer />
       </div>
     </Router>
   );
