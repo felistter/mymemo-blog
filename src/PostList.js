@@ -21,7 +21,7 @@ const PostList = ({ postsArray }) => {
               </h2>
             </Link>
 
-            <p className="mt-2 text-gray-600">{post_item.description}...</p>
+            <p className="mt-2 text-gray-600">{post_item.description} ...</p>
 
             <div className="flex justify-between items-center mt-4">
               <Link
