@@ -5,6 +5,8 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Create from "./Create";
 import PostDetails from "./PostDetails";
 import NotFound from "./404Error";
+import HomeAdmin from "./HomeAdmin";
+import EditCreate from "./EditCreate";
 
 function App() {
   return (
@@ -19,8 +21,14 @@ function App() {
             <Route path="/create">
               <Create />
             </Route>
+            <Route path="/posts_admin">
+              <HomeAdmin />
+            </Route>
             <Route path="/posts/:id">
               <PostDetails />
+            </Route>
+            <Route path="/edit/:id">
+              <EditCreate />
             </Route>
             <Route path="*">
               <NotFound />
