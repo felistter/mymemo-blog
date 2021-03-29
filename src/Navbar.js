@@ -24,13 +24,21 @@ const Navbar = () => {
         </div>
         <div className="md:flex flex-col md:flex-row md:-mx-4 hidden">
           <Link
-            className="my-1 text-gray-800 hover:text-blue-500 md:mx-4 md:my-0"
+            className="my-1 text-gray-800 hover:text-cyan-700 md:mx-4 md:my-0"
             to="/"
           >
             Home
           </Link>
+
           <Link
-            className="my-1 text-gray-800 hover:text-blue-500 md:mx-4 md:my-0"
+            className="my-1 text-gray-800 hover:text-cyan-700 md:mx-4 md:my-0"
+            to="/posts_admin"
+          >
+            My Posts
+          </Link>
+
+          <Link
+            className="my-1 text-gray-800 hover:text-cyan-700 md:mx-4 md:my-0"
             to="/create"
           >
             New Post
