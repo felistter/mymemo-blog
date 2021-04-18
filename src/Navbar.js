@@ -53,7 +53,6 @@ const Navbar = ({ firebase }) => {
               </Link>
 
               <a
-                href="#"
                 className="my-1 text-gray-800 hover:text-cyan-700 md:mx-4 md:my-0"
                 onClick={() => {
                   auth.signOut().then(() => {
@@ -66,7 +65,6 @@ const Navbar = ({ firebase }) => {
             </>
           ) : (
             <a
-              href="#"
               className="my-1 text-gray-800 hover:text-cyan-700 md:mx-4 md:my-0"
               onClick={() => {
                 const provider = new firebase.auth.GoogleAuthProvider();

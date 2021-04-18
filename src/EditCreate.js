@@ -18,9 +18,8 @@ const EditCreate = ({ firebase }) => {
         setTitle(newPost.title);
         setBody(newPost.body);
         setDescription(newPost.description);
-        
       });
-  }, []);
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
