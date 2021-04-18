@@ -52,8 +52,8 @@ const Navbar = ({ firebase }) => {
                 New Post
               </Link>
 
-              <a
-                className="my-1 text-gray-800 hover:text-cyan-700 md:mx-4 md:my-0"
+              <button
+                className="my-1 text-gray-800 hover:text-cyan-700 focus:outline-none active:outline-none md:mx-4 md:my-0"
                 onClick={() => {
                   auth.signOut().then(() => {
                     history.push("/");
@@ -61,18 +61,18 @@ const Navbar = ({ firebase }) => {
                 }}
               >
                 Sign Out
-              </a>
+              </button>
             </>
           ) : (
-            <a
-              className="my-1 text-gray-800 hover:text-cyan-700 md:mx-4 md:my-0"
+            <button
+              className="my-1 text-gray-800 hover:text-cyan-700 focus:outline-none active:outline-none md:mx-4 md:my-0"
               onClick={() => {
                 const provider = new firebase.auth.GoogleAuthProvider();
                 auth.signInWithPopup(provider).then(() => history.push("/"));
               }}
             >
               Sign In
-            </a>
+            </button>
           )}
         </div>
       </div>
