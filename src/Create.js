@@ -1,31 +1,36 @@
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 
-const Create = () => {
+const Create = ({ firebase }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [body, setBody] = useState("");
-  const [author, setAuthor] = useState("");
-  const [avatar, setAvatar] = useState("");
-  const [date, setDate] = useState("");
   const [isPending, setIsPending] = useState(false);
   const history = useHistory();
+  const auth = firebase.auth();
+  const firestore = firebase.firestore();
+  const postsRef = firestore.collection("posts");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const post = { title, description, body, author, avatar, date };
 
+    const { uid, photoURL, displayName } = auth.currentUser;
     setIsPending(true);
 
-    fetch("http://localhost:8000/posts", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(post),
-    }).then(() => {
-      console.log("new post added");
-      setIsPending(false);
-      history.push("/");
-    });
+    postsRef
+      .add({
+        author: displayName,
+        avatar: photoURL,
+        body: body,
+        date: firebase.firestore.FieldValue.serverTimestamp(),
+        description: description,
+        title: title,
+        uid: uid,
+      })
+      .then(() => {
+        setIsPending(false);
+        history.push("/");
+      });
   };
 
   return (
@@ -81,46 +86,6 @@ const Create = () => {
                     value={body}
                     onChange={(e) => setBody(e.target.value)}
                   ></textarea>
-                </div>
-
-                <div className="col-span-6">
-                  <label className="text-lg text-gray-600">Author:</label>
-                  <input
-                    maxLength={50}
-                    className="mt-1 focus:ring-cyan-700 focus:border-cyan-700 block w-full shadow-sm border-gray-300 rounded-md"
-                    type="text"
-                    required
-                    value={author}
-                    onChange={(e) => setAuthor(e.target.value)}
-                  />
-                </div>
-
-                <div className="col-span-6">
-                  <label className="text-lg text-gray-600">Post date:</label>
-
-                  <input
-                    className="mt-1 text-gray-500 focus:ring-cyan-700 focus:border-cyan-700 block w-full shadow-sm border-gray-300 rounded-md"
-                    type="date"
-                    required
-                    value={date}
-                    min="01-01-2019"
-                    max="31-12-2025"
-                    onChange={(e) => setDate(e.target.value)}
-                  />
-                </div>
-
-                <div className="col-span-6">
-                  <label className="text-lg text-gray-600">
-                    Author's photo:
-                  </label>
-                  <input
-                    className="mt-1 focus:ring-cyan-700 focus:border-cyan-700 block w-full shadow-sm border-gray-300 rounded-md"
-                    placeholder="URL"
-                    type="text"
-                    required
-                    value={avatar}
-                    onChange={(e) => setAvatar(e.target.value)}
-                  />
                 </div>
               </div>
             </div>

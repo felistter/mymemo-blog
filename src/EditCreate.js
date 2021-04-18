@@ -1,52 +1,35 @@
 import { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import useFetch from "./useFetch";
 
-const EditCreate = () => {
+const EditCreate = ({ firebase }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [body, setBody] = useState("");
-  const [author, setAuthor] = useState("");
-  const [avatar, setAvatar] = useState("");
-  const [date, setDate] = useState("");
   const [isPending, setIsPending] = useState(false);
   const history = useHistory();
-
   const { id } = useParams();
 
   useEffect(() => {
-    fetch("http://localhost:8000/posts/" + id)
-      .then((res) => {
-        if (!res.ok) {
-          throw Error("could not fetch the data for that resource");
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setTitle(data.title);
-        setDescription(data.description);
-        setBody(data.body);
-        setAuthor(data.author);
-        setAvatar(data.avatar);
-        setDate(data.date);
+    firebase
+      .firestore()
+      .doc("posts/" + id)
+      .onSnapshot((snapshot) => {
+        const newPost = snapshot.data();
+        setTitle(newPost.title);
+        setBody(newPost.body);
+        setDescription(newPost.description);
+        
       });
   }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const post = { title, description, body, author, avatar, date };
-
+    firebase
+      .firestore()
+      .doc("posts/" + id)
+      .update({ title, body, description });
+    history.push("/");
     setIsPending(true);
-
-    fetch("http://localhost:8000/posts/" + id, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(post),
-    }).then(() => {
-      console.log("post updated");
-      setIsPending(false);
-      history.push("/");
-    });
   };
 
   return (
@@ -102,46 +85,6 @@ const EditCreate = () => {
                     value={body}
                     onChange={(e) => setBody(e.target.value)}
                   ></textarea>
-                </div>
-
-                <div className="col-span-6">
-                  <label className="text-lg text-gray-600">Author:</label>
-                  <input
-                    maxLength={50}
-                    className="mt-1 focus:ring-cyan-700 focus:border-cyan-700 block w-full shadow-sm border-gray-300 rounded-md"
-                    type="text"
-                    required
-                    value={author}
-                    onChange={(e) => setAuthor(e.target.value)}
-                  />
-                </div>
-
-                <div className="col-span-6">
-                  <label className="text-lg text-gray-600">Post date:</label>
-
-                  <input
-                    className="mt-1 text-gray-500 focus:ring-cyan-700 focus:border-cyan-700 block w-full shadow-sm border-gray-300 rounded-md"
-                    type="date"
-                    required
-                    value={date}
-                    min="01-01-2019"
-                    max="31-12-2025"
-                    onChange={(e) => setDate(e.target.value)}
-                  />
-                </div>
-
-                <div className="col-span-6">
-                  <label className="text-lg text-gray-600">
-                    Author's photo:
-                  </label>
-                  <input
-                    className="mt-1 focus:ring-cyan-700 focus:border-cyan-700 block w-full shadow-sm border-gray-300 rounded-md"
-                    placeholder="URL"
-                    type="text"
-                    required
-                    value={avatar}
-                    onChange={(e) => setAvatar(e.target.value)}
-                  />
                 </div>
               </div>
             </div>
