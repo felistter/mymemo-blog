@@ -19,7 +19,7 @@ const EditCreate = ({ firebase }) => {
         setBody(newPost.body);
         setDescription(newPost.description);
       });
-  });
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
