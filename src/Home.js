@@ -1,12 +1,14 @@
 import PostList from "./PostList";
-import useFetch from "./useFetch";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { useCollection } from "react-firebase-hooks/firestore";
 
-const Home = () => {
-  const { data: posts, isPending, error } = useFetch(
-    "http://localhost:8000/posts"
+const Home = ({ firebase }) => {
+  const firestore = firebase.firestore();
+  const [posts, isPending, error] = useCollection(
+    firestore.collection("posts").orderBy("date", "desc")
   );
+
   return (
     <div className="px-6 py-8">
       <div className="flex justify-between container mx-auto">
@@ -17,7 +19,7 @@ const Home = () => {
               <FontAwesomeIcon className="fa-spin fa-3x" icon={faSpinner} />
             </div>
           )}
-          {posts && <PostList postsArray={posts} />}
+          {posts && <PostList postsDocs={posts.docs} />}
         </div>
       </div>
     </div>

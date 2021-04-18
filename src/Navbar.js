@@ -1,8 +1,14 @@
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useHistory } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar = ({ firebase }) => {
+  const auth = firebase.auth();
+  const [user] = useAuthState(auth);
+  const history = useHistory();
+
   return (
     <nav className="bg-white px-6 py-4 shadow">
       <div className="flex flex-col container mx-auto md:flex-row md:items-center md:justify-between">
@@ -30,19 +36,46 @@ const Navbar = () => {
             Home
           </Link>
 
-          <Link
-            className="my-1 text-gray-800 hover:text-cyan-700 md:mx-4 md:my-0"
-            to="/posts_admin"
-          >
-            My Posts
-          </Link>
+          {user ? (
+            <>
+              <Link
+                className="my-1 text-gray-800 hover:text-cyan-700 md:mx-4 md:my-0"
+                to="/posts_admin"
+              >
+                My Posts
+              </Link>
 
-          <Link
-            className="my-1 text-gray-800 hover:text-cyan-700 md:mx-4 md:my-0"
-            to="/create"
-          >
-            New Post
-          </Link>
+              <Link
+                className="my-1 text-gray-800 hover:text-cyan-700 md:mx-4 md:my-0"
+                to="/create"
+              >
+                New Post
+              </Link>
+
+              <a
+                href="#"
+                className="my-1 text-gray-800 hover:text-cyan-700 md:mx-4 md:my-0"
+                onClick={() => {
+                  auth.signOut().then(() => {
+                    history.push("/");
+                  });
+                }}
+              >
+                Sign Out
+              </a>
+            </>
+          ) : (
+            <a
+              href="#"
+              className="my-1 text-gray-800 hover:text-cyan-700 md:mx-4 md:my-0"
+              onClick={() => {
+                const provider = new firebase.auth.GoogleAuthProvider();
+                auth.signInWithPopup(provider).then(() => history.push("/"));
+              }}
+            >
+              Sign In
+            </a>
+          )}
         </div>
       </div>
     </nav>
