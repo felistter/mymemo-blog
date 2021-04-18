@@ -27,6 +27,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: craco install, build and test
       run: | 
-        npm install
+        npm install --legacy-peer-deps
         npx craco test --passWithNoTests
         npx craco build
